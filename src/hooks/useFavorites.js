@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export function useFavorites() {
+  const { user } = useAuth();
+  const storageKey = user?.username ? `favorites:${user.username}` : "favorites:guest";
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("favorites")) || [];
-    setFavorites(saved);
-  }, []);
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey)) || [];
+      setFavorites(saved);
+    } catch {
+      setFavorites([]);
+    }
+  }, [storageKey]);
 
   const toggleFavorite = (item) => {
     let updated;
@@ -16,7 +23,7 @@ export function useFavorites() {
       updated = [...favorites, item];
     }
     setFavorites(updated);
-    localStorage.setItem("favorites", JSON.stringify(updated));
+    try { localStorage.setItem(storageKey, JSON.stringify(updated)); } catch {}
   };
 
   return { favorites, toggleFavorite };
