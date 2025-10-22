@@ -1,23 +1,49 @@
 # WotoWoto TV
 
-Minimal React + Vite + Tailwind scaffold for a local movie/TV app.
+React + Vite streaming UI with TMDB-powered browse/search, player page, carousels, and per‑user lists (local). TailwindCSS for styling.
 
-How to run
+**Quick Start**
+- `npm install`
+- `npm run dev`
 
-1. npm install
-2. npm run dev
+**Environment**
+- Create `.env` with: `VITE_TMDB_API_KEY=your_tmdb_api_key`
+- Example file: `WOTOWOTO-TV/.env.example`
+- PWA manifest: `WOTOWOTO-TV/public/manifest.json`
 
-Files created
-- public/index.html, favicon, logo
-- src/main.jsx, App.jsx, index.css
-- src/data/library.js
-- src/components/*
-- src/hooks/*
-- src/pages/Home.jsx
-- src/utils/formatters.js
-- src/assets placeholders
-- package.json, tailwind and postcss configs
+**Routes**
+- `/` Home feed with carousels and search
+- `/:mediaType/:id` Details page (movie or tv)
+- `/play?src=...&title=...&id=...` direct embed source
+- `/play?tmdbId=...&mediaType=movie` TMDB movie embed
+- `/play?tmdbId=...&mediaType=tv&season=..&episode=..` TMDB TV embed
 
-Notes
-- Image files are empty placeholders — replace with actual images.
-- Tailwind at-rules may show editor lint warnings until Tailwind is installed and the project is opened in an environment that supports PostCSS.
+**Features**
+- Debounced search (local + TMDB) with “Load more” pagination
+- Home carousels: Trending, Popular, top Genres (TMDB Discover)
+- Details: overview, genres, “Because You Watched” recs
+- TV seasons/episodes with still thumbnails and runtimes
+- Player page with safe postMessage handling and progress save
+- Per‑user favorites and continue watching (namespaced localStorage)
+- Mini progress bar on cards; hero uses TMDB backdrops when available
+- Subtitles preference selector (stored per user)
+- Basic SEO meta + manifest for installability
+
+**Controls**
+- Carousels: hover arrows, drag to scroll (mouse/touch), Arrow keys when focused
+- Click TMDB items → Details; local items with `source` → Player
+- Navbar: type a username to sign in; My List toggles favorites view
+
+**Key Files**
+- App entry: `WOTOWOTO-TV/src/main.jsx`, `WOTOWOTO-TV/src/App.jsx`
+- Home/feed: `WOTOWOTO-TV/src/pages/Home.jsx`
+- Details: `WOTOWOTO-TV/src/pages/Details.jsx`
+- Player: `WOTOWOTO-TV/src/pages/Player.jsx`
+- TMDB API: `WOTOWOTO-TV/src/api/tmdb.js`
+- Favorites/Progress: `WOTOWOTO-TV/src/hooks/useFavorites.js`, `WOTOWOTO-TV/src/hooks/useProgress.js`
+- Auth + Settings: `WOTOWOTO-TV/src/context/AuthContext.jsx`, `WOTOWOTO-TV/src/hooks/useSettings.js`
+
+**Notes & Limitations**
+- No server backend; accounts are client‑side only (localStorage)
+- TMDB provides metadata/posters, not streams; playback uses external embeds
+- Replace image placeholders in `WOTOWOTO-TV/src/assets` as needed

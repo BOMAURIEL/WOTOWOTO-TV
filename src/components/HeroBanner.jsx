@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export default function HeroBanner({ movies, onSelect }) {
   const [current, setCurrent] = useState(0);
@@ -13,15 +13,16 @@ export default function HeroBanner({ movies, onSelect }) {
   if (!movies.length) return null;
 
   const movie = movies[current];
+  const bgUrl = useMemo(() => movie?.backdrop || movie?.thumbnail || "", [movie]);
 
   return (
     <section
       className="relative h-[70vh] w-full flex items-end bg-black text-white overflow-hidden"
-      style={{
-        backgroundImage: `url(${movie.thumbnail})`,
+      style={bgUrl ? {
+        backgroundImage: `url(${bgUrl})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-      }}
+      } : { background: "linear-gradient(to top, #000, #111)" }}
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
       <div className="relative z-10 p-8 max-w-2xl">
